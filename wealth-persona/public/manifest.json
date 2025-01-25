@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Financial Agent",
+  "name": "Wealth Persona",
   "version": "1.0",
   "description": "A Chrome extension that provides financial advice and helps users manage stocks.",
   "permissions": ["activeTab"],
