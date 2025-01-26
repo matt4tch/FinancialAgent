@@ -4,12 +4,14 @@ import { OrbitControls, useGLTF, Text } from "@react-three/drei"
 import * as THREE from "three"
 
 function Model() {
-    const { scene, nodes } = useGLTF("/public/models/model.glb")
-    const duckRef = useRef()
-    const mouthRef = useRef()
-    const [speaking, setSpeaking] = useState(false)
-    const phrase = "Quack quack! I'm a talking duck!"
-    const [currentLetter, setCurrentLetter] = useState(0)
+    const { scene, nodes } = useGLTF("/public/models/model.glb");
+    console.log(nodes);
+    console.log('nodes', nodes.Armature.position.set(0, 0, 0));
+    console.log('scene', scene);
+    const [mouthOpen, setMouthOpen] = useState(0);
+    const [speaking, setSpeaking] = useState(false);
+    const phrase = "I'm Sandra, your personal finance assistant";
+    const [currentLetter, setCurrentLetter] = useState(0);
 
     useEffect(() => {
         if (speaking && currentLetter < phrase.length) {
@@ -23,25 +25,27 @@ function Model() {
         }
     }, [speaking, currentLetter])
 
-    useFrame((state) => {
-        if (mouthRef.current && speaking) {
-            mouthRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 30) * 0.1
-        }
-    })
-
-    useEffect(() => {
-        if (duckRef.current) {
-            duckRef.current.scale.set(2, 2, 2) // Make the duck larger
-        }
-        // Find the mouth part and set its reference
-        const mouth = nodes["DuckMouth"]
-        if (mouth) {
-            mouthRef.current = mouth
-        }
-    }, [nodes])
+    const speakText = (text) => {
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(text);
+        const voices = window.speechSynthesis.getVoices();
+        utterance.voice = voices.find(voice => voice.name === "Aaron");
+        utterance.rate = 0.6;
+        // Simulate mouth movement with TTS
+        utterance.onstart = () => {
+            const interval = setInterval(() => {
+                setMouthOpen(Math.random()); // Random mouth movement
+            }, 100); // Adjust frequency as needed
+            utterance.onend = () => {
+                clearInterval(interval);
+                setMouthOpen(0); // Close the mouth when speech ends
+            };
+        };
+        synth.speak(utterance);
+    };
 
     return (
-        <group ref={duckRef} position={[0, -1, 0]} onClick={() => setSpeaking(true)}>
+        <group position={[0, -1, 0]} onClick={() => { setSpeaking(true); speakText(phrase) }}>
             <primitive object={scene} />
             {speaking && (
                 <Text position={[0, 2, 0]} fontSize={0.2} color="black" anchorX="center" anchorY="middle">
