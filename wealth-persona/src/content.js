@@ -69,14 +69,10 @@ const createButtonWithShadowDOM = () => {
   console.log("Button created successfully.");
 };
 
-// Function to show a full-screen popup
+// Function to show a full-screen popup with a 3x3 grid
+// Function to show a full-screen popup with a 3x3 grid
 const showPopup = () => {
-  const stockTickerElement = document.querySelector(".quote-symbol .nowrap.ellipsis");
-  const stockExchangeElement = document.querySelector(".quote-exch.text-regular.fg50.nowrap.quote-sm");
-
-  const stockTicker = stockTickerElement ? stockTickerElement.textContent.trim() : "Unknown Ticker";
-  const stockExchange = stockExchangeElement ? stockExchangeElement.textContent.trim() : "Unknown Exchange";
-
+  // Create a popup container
   const popupContainer = document.createElement("div");
   popupContainer.id = "popup-container";
   popupContainer.style.cssText = `
@@ -86,58 +82,98 @@ const showPopup = () => {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
-    color: white;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     font-family: Arial, sans-serif;
   `;
 
-  const popupContent = document.createElement("div");
-  popupContent.style.cssText = `
-    text-align: center;
+  // Create the white square container for the grid
+  const gridContainer = document.createElement("div");
+  gridContainer.style.cssText = `
+    position: relative;
+    background-color: white;
+    width: 400px;
+    height: 400px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 5px;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   `;
 
-  const tickerText = document.createElement("h1");
-  tickerText.textContent = `Ticker: ${stockTicker}`;
-  tickerText.style.cssText = `
-    font-size: 2rem;
-    margin-bottom: 20px;
-  `;
+  // Create placeholders for grid elements
+  for (let i = 0; i < 9; i++) {
+    const gridItem = document.createElement("div");
+    gridItem.textContent = `Placeholder ${i + 1}`;
+    gridItem.style.cssText = `
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    `;
 
-  const exchangeText = document.createElement("h2");
-  exchangeText.textContent = `Exchange: ${stockExchange}`;
-  exchangeText.style.cssText = `
-    font-size: 1.5rem;
-    margin-bottom: 40px;
-  `;
+    // Add click functionality for each grid item (optional for future use)
+    gridItem.addEventListener("click", () => {
+      alert(`Clicked on Placeholder ${i + 1}`);
+    });
 
+    gridContainer.appendChild(gridItem);
+  }
+
+  // Create a close button
   const closeButton = document.createElement("button");
-  closeButton.textContent = "Close";
+  closeButton.textContent = "✖";
   closeButton.style.cssText = `
-    padding: 10px 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
     background-color: #ff4d4d;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   `;
   closeButton.addEventListener("click", () => {
     document.body.removeChild(popupContainer);
   });
 
-  popupContent.appendChild(tickerText);
-  popupContent.appendChild(exchangeText);
-  popupContent.appendChild(closeButton);
+  // Add the close button to the grid container
+  gridContainer.appendChild(closeButton);
 
-  popupContainer.appendChild(popupContent);
+  // Add the grid container to the popup
+  popupContainer.appendChild(gridContainer);
+
+  // Add the popup to the body
   document.body.appendChild(popupContainer);
 
-  console.log("Popup displayed with Ticker and Exchange.");
+  console.log("Popup displayed with a 3x3 grid.");
 };
+
+// Function to dynamically update the grid elements
+const updateGridElement = (index, content) => {
+  const gridContainer = document.querySelector("#popup-container > div");
+  if (gridContainer && index >= 0 && index < 9) {
+    const gridItems = gridContainer.querySelectorAll("div");
+    gridItems[index].textContent = content;
+    console.log(`Updated grid item ${index + 1} with content: ${content}`);
+  } else {
+    console.error("Grid container or index out of bounds.");
+  }
+};
+
+
 
 // Function to scrape data
 const scrapeData = () => {
