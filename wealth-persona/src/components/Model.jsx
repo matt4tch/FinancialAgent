@@ -54,19 +54,22 @@ function Model() {
 
     export default function ThreeDScene() {
     return (
-        <div className="w-full h-screen">
-            <Canvas camera={{ position: [0, 5, 10], fov: 50 }}>
-                <ambientLight intensity={0.5} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-                <pointLight position={[-10, -10, -10]} />
+        <div className="relative w-screen h-screen bg-gray-900">
+            <Canvas
+                camera={{position: [0, 5, 10], fov: 50}}
+                style={{width: "700px", height: "1000px"}}
+            >
+                <ambientLight intensity={0.5}/>
+                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1}/>
+                <pointLight position={[-10, -10, -10]}/>
                 <Suspense fallback={null}>
-                    <Model />
-                    <OrbitControls />
+                    <Model/>
+                    <OrbitControls/>
                 </Suspense>
             </Canvas>
-            <div className="absolute bottom-4 left-4 text-white bg-black bg-opacity-50 p-2 rounded">
-                Click on the duck to make it speak!
-            </div>
+            {/*<div className="absolute bottom-4 left-4 text-white bg-black bg-opacity-50 p-2 rounded">*/}
+            {/*    Click on the duck to make it speak!*/}
+            {/*</div>*/}
         </div>
     )
-}
+    }
