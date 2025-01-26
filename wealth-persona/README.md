@@ -1,8 +1,27 @@
-# React + Vite
+// Start of Selection
+# Wealth Persona Module
+<img src='/FinancialAgent/wealth-persona/public/icons/wealth_persona_logo.png' width=30px height=30px alt='Logo'>
+The Wealth Persona module is a core component of the Financial Agent web extension, designed to provide interactive financial advice through a 3D model interface. Built with React and Vite, this setup ensures rapid development with Hot Module Replacement (HMR) and maintains code quality with ESLint rules.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Key Plugins and Technologies
 
-Currently, two official plugins are available:
+- [Three.js](https://threejs.org/): Utilized for rendering 3D models and managing scenes.
+- [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader): Loads and displays 3D models in GLTF format.
+- [OrbitControls](https://threejs.org/docs/#examples/en/controls/OrbitControls): Enables user interaction with the 3D model through mouse controls.
+- [Tailwind CSS](https://tailwindcss.com/): Provides utility-first styling for responsive and modern UI design.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react): Integrates React with Vite, facilitating fast refresh capabilities.
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc): Uses SWC for enhanced build performance and faster compilation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This configuration ensures that the Financial Agent delivers a seamless and engaging user experience by combining modern web technologies with interactive 3D visualizations.
+
+## Contributors
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aryanp05"><img src="https://avatars.githubusercontent.com/u/157305621?v=4" width="100px;" alt="Aryan Patel"/><br /><sub><b>Aryan Patel</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/matt4tch"><img src="https://avatars.githubusercontent.com/u/107216405?v=4" width="100px" alt="Matthew Tchouikine"/><br /><sub><b>Matthew Tchouikine</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/utkarshg20"><img src="https://avatars.githubusercontent.com/u/88526325?v=4" width="100px;" alt="Utkarsh"/><br /><sub><b>Utkarsh</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/karanjot-gaidu"><img src="https://avatars.githubusercontent.com/u/90838376?v=4" width="100px;" alt="Karanjot Gaidu"/><br /><sub><b>Karanjot Gaidu</b></sub></a><br /></td>
+    </tr>
+  </tbody>
+</table>
