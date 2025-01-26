@@ -3,7 +3,7 @@
   "name": "Wealth Persona",
   "version": "1.0",
   "description": "A Chrome extension that provides financial advice and helps users manage stocks.",
-  "permissions": ["activeTab"],
+  "permissions": ["tabs", "scripting", "activeTab"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -20,10 +20,16 @@
   "content_scripts": [
     {
       "matches": ["https://portal.interactivebrokers.com/*"],
-      "js": ["content.js"]
+      "js": ["contentScript.js"]
     }
   ],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["contentScript.js", "assets/*.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
