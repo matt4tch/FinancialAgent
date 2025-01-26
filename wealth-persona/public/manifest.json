@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Wealth Persona",
-  "version": "1.0",
-  "description": "A Chrome extension that provides financial advice and helps users manage stocks.",
-  "permissions": ["activeTab"],
+  "version": "1.2",
+  "description": "A Chrome extension that scrapes stock tickers and exchanges from Interactive Brokers.",
+  "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": [
-    "https://www.moodify.design/"
+    "https://portal.interactivebrokers.com/*"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -22,7 +22,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.moodify.design/"],
+      "matches": ["https://portal.interactivebrokers.com/*"],
       "js": ["content.js"]
     }
   ],
