@@ -1,8 +1,7 @@
-// Start of Selection
 # Wealth Persona Module
-<img src='/FinancialAgent/wealth-persona/public/icons/wealth_persona_logo.png' width=30px height=30px alt='Logo'>
-The Wealth Persona module is a core component of the Financial Agent web extension, designed to provide interactive financial advice through a 3D model interface. Built with React and Vite, this setup ensures rapid development with Hot Module Replacement (HMR) and maintains code quality with ESLint rules.
 
+The Wealth Persona module is a core component of the Financial Agent web extension. Designed to provide interactive financial advice through a 3D model interface, this module elevates user engagement by combining modern web development technologies with immersive 3D visualizations.
+    
 ## Key Plugins and Technologies
 
 - [Three.js](https://threejs.org/): Utilized for rendering 3D models and managing scenes.
