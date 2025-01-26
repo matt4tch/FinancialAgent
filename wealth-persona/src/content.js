@@ -8,6 +8,27 @@ import {
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+// Text-to-speech function
+const speakText = (text) => {
+  const synth = window.speechSynthesis;
+  const utterance = new SpeechSynthesisUtterance(text);
+  const voices = window.speechSynthesis.getVoices();
+  utterance.voice = voices.find(voice => voice.name === "Aaron");
+  utterance.rate = 0.6;
+
+  // Simulate mouth movement with TTS
+  utterance.onstart = () => {
+    const interval = setInterval(() => {
+      setMouthOpen(Math.random()); // Random mouth movement
+    }, 100); // Adjust frequency as needed
+    utterance.onend = () => {
+      clearInterval(interval);
+      setMouthOpen(0); // Close the mouth when speech ends
+    };
+  };
+  synth.speak(utterance);
+};
+
 // Step 1: Create a container for the 3D viewer and text box
 const container = document.createElement("div");
 container.style.position = "fixed";
@@ -99,6 +120,16 @@ container.appendChild(canvas);
         model.position.set(-5, -5, 0); // Position the model to the left
         model.scale.set(3, 3, 3); // Scale up the model to make it bigger
         scene.add(model);
+
+        // Step 10: Add click event listener to trigger speech
+        model.traverse((child) => {
+          if (child.isMesh) {
+            child.cursor = "pointer"; // Make the cursor a pointer to indicate clickable
+            child.on('click', () => {
+              speakText("Hello! I am the character!");
+            });
+          }
+        });
       },
       undefined,
       (error) => {
