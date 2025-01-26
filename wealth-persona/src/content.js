@@ -1,227 +1,134 @@
-// Function to observe URL changes and trigger scraping
-const observeURLChanges = () => {
-  let currentURL = window.location.href;
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  DirectionalLight,
+  AmbientLight
+} from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-  const urlObserver = setInterval(() => {
-    if (currentURL !== window.location.href) {
-      console.log("URL changed. Restarting scraping...");
-      currentURL = window.location.href;
+// Step 1: Create a container for the 3D viewer and text box
+const container = document.createElement("div");
+container.style.position = "fixed";
+container.style.top = "0";
+container.style.left = "0";
+container.style.width = "100vw";
+container.style.height = "100vh";
+container.style.zIndex = "9999";
+container.style.background = "rgba(0, 0, 0, 0.7)";
+document.body.appendChild(container);
 
-      // Restart scraping
-      startScraping();
-    }
-  }, 1000); // Check for URL changes every 1 second
-};
+// Create a text box container on the right
+const textBox = document.createElement("div");
+textBox.style.position = "absolute";
+textBox.style.top = "20px";
+textBox.style.right = "20px";
+textBox.style.width = "45%";
+textBox.style.height = "calc(100vh - 40px)";
+textBox.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
+textBox.style.color = "#333";
+textBox.style.padding = "20px";
+textBox.style.borderRadius = "10px";
+textBox.style.overflowY = "auto";
+textBox.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
+container.appendChild(textBox);
 
-// Function to create the button in a Shadow DOM
-const createButtonWithShadowDOM = () => {
-  if (document.querySelector("#my-shadow-host")) {
-    console.log("Button already exists.");
-    return;
-  }
+// Add some stylish text inside the text box
+const heading = document.createElement("h1");
+heading.textContent = "3D Model Viewer";
+heading.style.textAlign = "center";
+heading.style.fontFamily = "Arial, sans-serif";
+heading.style.color = "#444";
+textBox.appendChild(heading);
 
-  console.log("Creating button...");
+const description = document.createElement("p");
+description.textContent = "This is a 3D model viewer. Use your mouse to interact with the model.";
+description.style.fontFamily = "Arial, sans-serif";
+description.style.fontSize = "16px";
+description.style.lineHeight = "1.5";
+textBox.appendChild(description);
 
-  const quoteMainElement = document.querySelector(".quote-main");
-  if (!quoteMainElement) {
-    console.error("quote-main element not found!");
-    return;
-  }
+// Add a close button to close the viewer
+const closeButton = document.createElement("button");
+closeButton.textContent = "Close";
+closeButton.style.position = "absolute";
+closeButton.style.top = "10px";
+closeButton.style.right = "10px";
+closeButton.style.padding = "10px 20px";
+closeButton.style.background = "red";
+closeButton.style.color = "#fff";
+closeButton.style.border = "none";
+closeButton.style.borderRadius = "5px";
+closeButton.style.cursor = "pointer";
+textBox.appendChild(closeButton);
 
-  const shadowHost = document.createElement("div");
-  shadowHost.id = "my-shadow-host";
-
-  shadowHost.style.display = "inline-block";
-  shadowHost.style.marginLeft = "20px";
-  shadowHost.style.verticalAlign = "middle";
-
-  const shadowRoot = shadowHost.attachShadow({ mode: "open" });
-
-  const button = document.createElement("button");
-  button.textContent = "Click Me!";
-  button.style.cssText = `
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-right: 20px;
-  `;
-
-  button.addEventListener("click", () => {
-    showPopup();
-  });
-
-  shadowRoot.appendChild(button);
-
-  const style = document.createElement("style");
-  style.textContent = `
-    button:hover {
-      background-color: #0056b3;
-    }
-  `;
-  shadowRoot.appendChild(style);
-
-  quoteMainElement.appendChild(shadowHost);
-
-  console.log("Button created successfully.");
-};
-
-// Function to show a full-screen popup with a 3x3 grid
-// Function to show a full-screen popup with a 3x3 grid
-const showPopup = () => {
-  // Create a popup container
-  const popupContainer = document.createElement("div");
-  popupContainer.id = "popup-container";
-  popupContainer.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    font-family: Arial, sans-serif;
-  `;
-
-  // Create the white square container for the grid
-  const gridContainer = document.createElement("div");
-  gridContainer.style.cssText = `
-    position: relative;
-    background-color: white;
-    width: 400px;
-    height: 400px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 5px;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  `;
-
-  // Create placeholders for grid elements
-  for (let i = 0; i < 9; i++) {
-    const gridItem = document.createElement("div");
-    gridItem.textContent = `Placeholder ${i + 1}`;
-    gridItem.style.cssText = `
-      background-color: #f0f0f0;
-      border: 1px solid #ddd;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 5px;
-      cursor: pointer;
-    `;
-
-    // Add click functionality for each grid item (optional for future use)
-    gridItem.addEventListener("click", () => {
-      alert(`Clicked on Placeholder ${i + 1}`);
-    });
-
-    gridContainer.appendChild(gridItem);
-  }
-
-  // Create a close button
-  const closeButton = document.createElement("button");
-  closeButton.textContent = "✖";
-  closeButton.style.cssText = `
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px 10px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  `;
-  closeButton.addEventListener("click", () => {
-    document.body.removeChild(popupContainer);
-  });
-
-  // Add the close button to the grid container
-  gridContainer.appendChild(closeButton);
-
-  // Add the grid container to the popup
-  popupContainer.appendChild(gridContainer);
-
-  // Add the popup to the body
-  document.body.appendChild(popupContainer);
-
-  console.log("Popup displayed with a 3x3 grid.");
-};
-
-// Function to dynamically update the grid elements
-const updateGridElement = (index, content) => {
-  const gridContainer = document.querySelector("#popup-container > div");
-  if (gridContainer && index >= 0 && index < 9) {
-    const gridItems = gridContainer.querySelectorAll("div");
-    gridItems[index].textContent = content;
-    console.log(`Updated grid item ${index + 1} with content: ${content}`);
-  } else {
-    console.error("Grid container or index out of bounds.");
-  }
-};
-
-
-
-// Function to scrape data
-const scrapeData = () => {
-  const stockTickerElement = document.querySelector(".quote-symbol .nowrap.ellipsis");
-  const stockExchangeElement = document.querySelector(".quote-exch.text-regular.fg50.nowrap.quote-sm");
-
-  if (stockTickerElement && stockExchangeElement) {
-    const stockTicker = stockTickerElement.textContent.trim();
-    const stockExchange = stockExchangeElement.textContent.trim();
-
-    console.log("Scraped Ticker:", stockTicker);
-    console.log("Scraped Exchange:", stockExchange);
-
-    createButtonWithShadowDOM();
-    stopScraping();
-  } else {
-    console.log("Waiting for elements to appear...");
-  }
-};
-
-// Stop all scraping mechanisms
-const stopScraping = () => {
-  clearInterval(intervalId);
-  observer.disconnect();
-  console.log("Stopped all scraping mechanisms.");
-};
-
-// Function to start scraping
-const startScraping = () => {
-  console.log("Starting scraping...");
-  scrapeData();
-
-  observer.observe(document.body, { childList: true, subtree: true });
-  intervalId = setInterval(() => {
-    console.log("Regular interval scraping...");
-    scrapeData();
-  }, 1000); // Check every 1 second
-};
-
-// Set up MutationObserver
-const observer = new MutationObserver(() => {
-  console.log("DOM updated. Checking for elements...");
-  scrapeData();
+closeButton.addEventListener("click", () => {
+  container.remove();
 });
 
-// Observe URL changes
-observeURLChanges();
+// Step 2: Create a canvas for rendering the 3D model
+const canvas = document.createElement("canvas");
+canvas.style.position = "absolute";
+canvas.style.left = "20px";  // Position the model to the left
+canvas.style.top = "20px";
+canvas.style.width = "calc(100% - 340px)"; // Make the model container smaller for the text box
+canvas.style.height = "calc(100vh - 40px)";
+container.appendChild(canvas);
 
-// Start scraping for the first time
-let intervalId;
-startScraping();
+// Step 3: Load Three.js dynamically
+(async () => {
+  // Step 4: Set up the scene, camera, and renderer
+  const scene = new Scene();
+  const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new WebGLRenderer({ canvas, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  // Step 5: Add lights
+  const ambientLight = new AmbientLight(0xffffff, 0.5);
+  const directionalLight = new DirectionalLight(0xffffff, 1);
+  directionalLight.position.set(5, 5, 5);
+  scene.add(ambientLight, directionalLight);
+
+  // Step 6: Load the 3D model
+  const loader = new GLTFLoader();
+  loader.load(
+      chrome.runtime.getURL("models/model.glb"), // Path to your 3D model
+      (gltf) => {
+        const model = gltf.scene;
+        model.position.set(-5, -5, 0); // Position the model to the left
+        model.scale.set(3, 3, 3); // Scale up the model to make it bigger
+        scene.add(model);
+      },
+      undefined,
+      (error) => {
+        console.error("Error loading model:", error);
+      }
+  );
+
+  // Step 7: Add OrbitControls for interaction
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  // Disable zooming to prevent scaling
+  controls.enableZoom = false;
+
+  // Limit the rotation to the Y-axis (horizontal spinning)
+  controls.enableRotate = true;
+  controls.minAzimuthAngle = -Math.PI / 2; // Start rotation from left
+  controls.maxAzimuthAngle = Math.PI / 2;  // End rotation at right
+
+  // Step 8: Position the camera
+  camera.position.y = 1;
+  camera.position.x = 4;
+  camera.position.z = 5;
+
+  // Step 9: Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
