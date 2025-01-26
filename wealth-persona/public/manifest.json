@@ -4,9 +4,6 @@
   "version": "1.0",
   "description": "A Chrome extension that provides financial advice and helps users manage stocks.",
   "permissions": ["activeTab"],
-  "host_permissions": [
-    "https://www.moodify.design/"
-  ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -22,7 +19,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.moodify.design/"],
+      "matches": ["https://portal.interactivebrokers.com/*"],
       "js": ["content.js"]
     }
   ],
