@@ -9,7 +9,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: './public/popup.html',
-        content: './src/content.js',
+        content: '/src/contentScript.jsx',
         background: './src/background.js'
       },
       output: {
@@ -17,6 +17,8 @@ export default defineConfig({
         chunkFileNames: '[name].js',
         assetFileNames: '[name].[ext]'
       }
-    }
+    },
+    outDir: "dist", // output folder
+    emptyOutDir: false, // to avoid wiping out once we build multiple times
   }
 });
