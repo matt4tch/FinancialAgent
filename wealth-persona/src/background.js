@@ -1,5 +1,3 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("Received data from content script:", message);
-    sendResponse({ status: "success" });
-  });
-  
+chrome.action.onClicked.addListener((tab) => {
+    chrome.tabs.sendMessage(tab.id, { action: "openModelViewer" });
+});
