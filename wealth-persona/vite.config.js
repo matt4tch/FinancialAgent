@@ -9,7 +9,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: './public/popup.html',
-        content: '/src/contentScript.jsx',
+        content: '/src/content.js',
         background: './src/background.js'
       },
       output: {
